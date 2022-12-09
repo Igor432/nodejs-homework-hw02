@@ -9,6 +9,7 @@ const PORT = process.env.PORT;
 
 
 app.listen(PORT, (err) => {
+    console.log("Server is launched")
     if (err) {
         console.error(err)
         console.log("Server failed")

@@ -42,7 +42,7 @@ const addContact = async(name, email, phone) => {
             email: email,
             phone: phone,
         });
-        console.log(contacts);
+        console.log(contacts)
     } catch (err) {
         console.log(err);
     }
