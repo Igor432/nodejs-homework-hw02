@@ -28,7 +28,7 @@ const PORT = process.env.PORT;
 
 const start = async() => {
     try {
-        connectMongo();
+        await connectMongo();
         app.listen(PORT, (err) => {
             if (err) {
                 console.error("Failed with error:", err);

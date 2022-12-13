@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const contact = new mongoose.Schema({
     name: {
@@ -8,20 +9,16 @@ const contact = new mongoose.Schema({
     email: {
         type: String,
         min: 8,
-        required: true,
         validate: {
             validator: function(value) {
-                return value.includes('@')
+                return value.includes("@");
             },
-            message: `There's no @ in your email`
-        }
-
+            message: `There's no @ in your email`,
+        },
     },
     phone: {
         type: String,
-        required: true,
-        min: 7
-
+        min: 7,
     },
     favorite: {
         type: Boolean,
@@ -29,6 +26,16 @@ const contact = new mongoose.Schema({
     },
 });
 
-const Contact = mongoose.model("contacts", contact)
+const bodyScheme = Joi.object({
+    name: Joi.string().required().min(2),
+    email: Joi.string().required().min(8),
+    phone: Joi.string().required().min(6),
+});
 
-module.exports = { Contact };
+const idValidation = Joi.object({
+    id: Joi.string().required(),
+});
+
+const Contact = mongoose.model("contacts", contact);
+
+module.exports = { Contact, bodyScheme, idValidation };
