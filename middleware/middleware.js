@@ -1,10 +1,26 @@
-const Joi = require("joi");
+const validate = (schema) => {
+    return (req, res, next) => {
+        const { error } = schema.validate(req.body);
+        if (error) {
+            error.status = 400;
+            next(error);
+        }
+        next();
+    };
+};
 
-
-const idValidation = Joi.object({
-    id: Joi.string().required()
-})
+const validateId = (schema) => {
+    return (req, res, next) => {
+        const { error } = schema.validate(req.params);
+        if (error) {
+            error.status = 400;
+            next(error);
+        }
+        next();
+    };
+};
 
 module.exports = {
-    idValidation
-}
+    validate,
+    validateId,
+};
