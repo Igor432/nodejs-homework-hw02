@@ -8,10 +8,11 @@ const get = async(req, res, next) => {
       https://medium.com/bb-tutorials-and-thoughts/how-to-paginate-your-nodejs-rest-api-endpoints-e98daface04d
 
       */
+    const { _id } = req.user;
     const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 0;
     const page = req.query.page ? parseInt(req.query.page) : 0;
     const favorite = req.query.favorite;
-    const { _id } = req.user;
+
 
     try {
         const results = await Contacts.getContacts(pageSize, page, favorite, _id);
