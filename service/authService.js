@@ -25,7 +25,9 @@ const login = async(email, password) => {
                 createdAt: user.createdAt,
             },
             process.env.JWT_SECRET
-        );
+        )
+
+        await User.findByIdAndUpdate(user._id, { token: token })
         return token;
     }
 }

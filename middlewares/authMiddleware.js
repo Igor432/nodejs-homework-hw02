@@ -6,19 +6,23 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk3Mzk1NzIwNGZiZmExYjBh
 */
 
 const authMiddleWare = async(req, res, next) => {
+
     if (req.headers.authorization === undefined) {
 
         res.status(401).json({
             message: 'Please, provide token'
         })
     } else {
+
         const [tokenType, token] = req.headers.authorization.split(' ');
         console.log(tokenType, token);
 
         try {
             const user = jwt.verify(token, process.env.JWT_SECRET);
             const checkedUser = await User.findById(user._id)
-            if (checkedUser) {
+            console.log(checkedUser)
+            if (checkedUser.token === token) {
+
                 req.token = token;
                 req.user = user;
 
@@ -34,6 +38,7 @@ const authMiddleWare = async(req, res, next) => {
         }
     }
 }
+
 
 
 module.exports = {
