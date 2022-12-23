@@ -48,11 +48,5 @@ describe("sign up text", () => {
 
 
 
-        /*
-                            expect(result.status).tobe(200)
-                expect(mRes.body.email).toEqual('shrek777@gmail.com');
-                expect(mRes.body.subscription).toEqual('starter');
-                expect(mockNext).toHaveBeenCalled()
-        */
     });
 });
