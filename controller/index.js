@@ -1,6 +1,7 @@
 const { Contact } = require("../service/schemas/contactModel");
 const Contacts = require("../service/contactService");
 
+
 const get = async(req, res, next) => {
     /*
       pagination

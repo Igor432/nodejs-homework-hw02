@@ -1,13 +1,19 @@
 const { registration, login } = require("../service/authService");
 const { User } = require("../service/schemas/userModel");
+const gravatar = require('gravatar');
+const Jimp = require("jimp");
 
 
-const registrationCtrl = async(req, res, next) => {
+const signUp = async(req, res, next) => {
     const { email, password } = req.body;
+    const avatarLink = gravatar.profile_url(email);
+    console.log(avatarLink)
+    console.log(req.body)
     const newEmail = await User.findOne({ email });
     console.log(newEmail);
     if (!newEmail) {
-        await registration(email, password);
+        await registration(email, password, avatarLink);
+
         res.status(201).json({
             status: "Created",
             ResponseBody: {
@@ -16,7 +22,8 @@ const registrationCtrl = async(req, res, next) => {
                     subscription: "starter",
                 },
             },
-        });
+        })
+
     } else {
 
         res.status(409).json({
@@ -26,23 +33,31 @@ const registrationCtrl = async(req, res, next) => {
             },
         })
     }
+    next()
 };
 
 const loginCtrl = async(req, res, next) => {
     const { email, password } = req.body;
 
     const token = await login(email, password);
+
+
     if (token) {
+        const user = await User.findOneAndUpdate({ email: email }, { token: token })
+
         res.status(200).json({
-            data: token,
+            token: token,
+            user: { email: user.email, subscription: user.subscription },
             message: 'success'
+
         })
+        return res
+
     } else {
         res.status(400).json({
             message: "Invalid password"
         })
     }
-
 }
 
 
@@ -87,13 +102,47 @@ const checkCurrent = async(req, res, next) => {
     }
 };
 
+const uploadCtrl = async(req, res, next) => {
+
+    const { avatar } = req.user
+    const { _id } = req.user
+
+    try {
+
+        await User.findByIdAndUpdate(_id, { avatar })
+        const updUser = await User.findById(_id)
+        Jimp.read(avatar)
+            .then(img => {
+                return img
+                    .resize(250, 250) // resize
+                    .quality(60) // set JPEG quality
+                    .greyscale() // set greyscale
+                    .write(`${avatar}`); // save
+            })
+            .catch(err => {
+                console.error(err);
+            });
+
+        res.status(200).json({
+            message: 'success',
+            user: updUser
+        })
+    } catch (err) {
+        res.status(400).json({
+            message: 'failed',
+
+        })
+    }
+}
+
 
 
 
 
 module.exports = {
-    registrationCtrl,
+    signUp,
     loginCtrl,
     logOut,
     checkCurrent,
+    uploadCtrl
 };

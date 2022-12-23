@@ -21,6 +21,10 @@ const user = new mongoose.Schema({
         required: [true, "You need password"],
         min: [6, 'At least 6 characters']
     },
+    avatar: {
+        type: String,
+
+    },
     subscription: {
         type: String,
         enum: ["starter", "pro", "business"],
