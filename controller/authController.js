@@ -109,7 +109,6 @@ const uploadCtrl = async(req, res, next) => {
 
     try {
 
-        await User.findByIdAndUpdate(_id, { avatar })
         const updUser = await User.findById(_id)
         Jimp.read(avatar)
             .then(img => {

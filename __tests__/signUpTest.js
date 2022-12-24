@@ -1,58 +1,54 @@
 const { loginCtrl } = require("../controller/authController");
 require("dotenv").config();
-const { start } = require("../server");
+const { connectMongo, disconnectMongo } = require("../db/db");
+const { User } = require("../service/schemas/userModel");
 
 
-describe("sign up text", () => {
+describe("test DB signUp", () => {
+    beforeAll(async() => {
+        await connectMongo();
+    });
 
+    afterAll(async() => {
+        await disconnectMongo()
+    });
 
-
-    test("should check if sign up return token+user/subscription field", async() => {
+    test("should check DB sign up", async() => {
 
 
         const mReq = {
             body: {
-                'email': "batman666@gmail.com",
-                'password': "batman666",
+                email: "joker666@gmail.com",
+                password: "joker666",
             },
         };
 
         const mRes = {
-
             status: function(status) {
-                this.statusCode = status
-                return this
+                this.statusCode = status;
+                return this;
             },
             json: function(data) {
-                this.token = data.token
-                this.user = data.user
-            }
-        }
-
+                this.token = data.token;
+                this.user = data.user;
+            },
+        };
 
         const mockNext = jest.fn();
 
         await loginCtrl(mReq, mRes, mockNext());
 
+        const testUser = await User.findOne({ email: "joker666@gmail.com" });
+
         expect(mRes.statusCode).toBe(200)
-        expect(typeof(mRes.user)).toBe('object')
-        expect(typeof(mRes.user.email)).toBe('string')
-        expect(typeof(mRes.user.subscription)).toBe('string')
-        expect(mockNext).toHaveBeenCalled()
+        expect(testUser.email).toBe("joker666@gmail.com")
+        expect(typeof(testUser)).toBe('object')
+        expect(typeof(testUser.email)).toBe("string");
+        expect(typeof(testUser.token)).toBe('string')
+        expect(typeof(testUser.subscription)).toBe("string");
+        expect(mockNext).toHaveBeenCalled();
 
 
-
-        console.log(mRes.statusCode);
-        console.log(mRes.token);
-        console.log(mRes.user);
-
-
-
-        /*
-                            expect(result.status).tobe(200)
-                expect(mRes.body.email).toEqual('shrek777@gmail.com');
-                expect(mRes.body.subscription).toEqual('starter');
-                expect(mockNext).toHaveBeenCalled()
-        */
+        console.log(testUser);
     });
 });

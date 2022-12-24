@@ -19,8 +19,13 @@ const connectMongo = async() => {
 
 };
 
+const disconnectMongo = async() => {
+    return mongo.disconnect()
+}
+
 
 
 module.exports = {
     connectMongo,
+    disconnectMongo
 };
