@@ -47,12 +47,7 @@ describe("test DB signUp", () => {
         expect(typeof(testUser.token)).toBe('string')
         expect(typeof(testUser.subscription)).toBe("string");
         expect(mockNext).toHaveBeenCalled();
+        console.log(testUser)
 
-
-        <<
-        << << < HEAD
-        console.log(testUser); ===
-        === = >>>
-        >>> > 15 c0956c41a177dc9ded68eea0596424fd018a07
-    });
-});
+    })
+})
