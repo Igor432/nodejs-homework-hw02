@@ -49,6 +49,10 @@ describe("test DB signUp", () => {
         expect(mockNext).toHaveBeenCalled();
 
 
-        console.log(testUser);
+        <<
+        << << < HEAD
+        console.log(testUser); ===
+        === = >>>
+        >>> > 15 c0956c41a177dc9ded68eea0596424fd018a07
     });
 });
