@@ -21,7 +21,7 @@ const registration = async(email, password, avatar, verificationToken) => {
     const transporter = nodemailer.createTransport(config);
     const emailOptions = {
         from: "igorellovich@meta.ua",
-        to: "igomar0602@gmail.com",
+        to: `${email}`,
         subject: "Nodemailer test",
         text: `Hello, please verify your account:`,
         html: `<a href='http://localhost:3000/api/user/verify/${verificationToken}'>CLIK THIS LINK</a>`,
@@ -64,7 +64,7 @@ const reSendEmail = async(req, res, next) => {
             const transporter = nodemailer.createTransport(config);
             const emailOptions = {
                 from: "igorellovich@meta.ua",
-                to: "igomar0602@gmail.com",
+                to: `${email}`,
                 subject: "Nodemailer test",
                 text: `Hello, please verify your account:`,
                 html: `<a href='http://localhost:3000/api/user/verify/${user.verificationToken}'>CLIK THIS LINK</a>`,
