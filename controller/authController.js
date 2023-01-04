@@ -2,17 +2,20 @@ const { registration, login } = require("../service/authService");
 const { User } = require("../service/schemas/userModel");
 const gravatar = require('gravatar');
 const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
+
 
 
 const signUp = async(req, res, next) => {
     const { email, password } = req.body;
     const avatarLink = gravatar.profile_url(email);
-    console.log(avatarLink)
+    const verificationToken = nanoid()
+
     console.log(req.body)
     const newEmail = await User.findOne({ email });
     console.log(newEmail);
     if (!newEmail) {
-        await registration(email, password, avatarLink);
+        await registration(email, password, avatarLink, verificationToken);
 
         res.status(201).json({
             status: "Created",
@@ -135,6 +138,28 @@ const uploadCtrl = async(req, res, next) => {
 }
 
 
+const verificationEmail = async(req, res, next) => {
+    const { verificationToken } = req.params
+    const user = await User.findOne({ verificationToken: verificationToken })
+
+    if (user) {
+        await User.findOneAndUpdate({ verificationToken: verificationToken }, { $set: { verify: true, verificationToken: null } })
+        res.status(200).json({
+            ResponseBody: {
+                message: 'Verification successful',
+            }
+        })
+    } else {
+        res.status(404).json({
+            ResponseBody: {
+                message: 'User not found'
+            }
+        })
+    }
+}
+
+
+
 
 
 
@@ -143,5 +168,7 @@ module.exports = {
     loginCtrl,
     logOut,
     checkCurrent,
-    uploadCtrl
+    uploadCtrl,
+    verificationEmail,
+
 };

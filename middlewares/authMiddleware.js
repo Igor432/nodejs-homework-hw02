@@ -6,12 +6,15 @@ Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2Mzk3Mzk1NzIwNGZiZmExYjBh
 */
 
 const authMiddleWare = async(req, res, next) => {
+    /*
     if (req.headers.authorization === undefined) {
 
-        res.status(401).json({
+        res.json({
             message: 'Please, provide token'
         })
     } else {
+        */
+    if (req.headers.authorization !== undefined) {
         const [tokenType, token] = req.headers.authorization.split(' ');
         console.log(tokenType, token);
 
@@ -26,7 +29,7 @@ const authMiddleWare = async(req, res, next) => {
             }
         } catch (err) {
             console.log(err);
-            res.status(401).json({
+            res.json({
                 status: "Unauthorized",
                 message: 'Not authorized'
             })
@@ -34,6 +37,7 @@ const authMiddleWare = async(req, res, next) => {
         }
     }
 }
+
 
 
 module.exports = {
